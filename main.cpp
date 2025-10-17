@@ -12,24 +12,27 @@
 #include "PriorityQueue.hpp"
 
 int main(int argc, char *argv[]) {
-    std::ifstream in(argv[1]);
-    if (!in) {
-        std::string altPath = std::string("input_output/") + argv[1];
-        in.open(altPath);
-        if (!in) {
-            std::cerr << "error: cannot open input " << argv[1] << "\n";
-            return 1;
-        }
-    }
-
     if (argc != 2) {
         std::cerr << "Usage: " << argv[0] << " <filename>\n";
         return 1;
     }
 
+
+
+
     const std::string dirName = std::string("input_output");
-    const std::string inputFileName = std::string(argv[1]);
-    const std::string inputFileBaseName = baseNameWithoutTxt(inputFileName);
+    const std::string givenName = std::string(argv[1]);
+
+    std::string inputFileName = givenName;
+    if (error_type s = regularFileExistsAndIsAvailable(inputFileName); s != NO_ERROR) {
+        std::string alt = dirName + "/" + givenName;
+        if (error_type s2 = regularFileExistsAndIsAvailable(alt); s2 != NO_ERROR) {
+            exitOnError(s, givenName);
+        }
+        inputFileName = alt;
+    }
+
+    const std::string inputFileBaseName = baseNameWithoutTxt(givenName);
 
     // build the path to the .tokens output file.
     const std::string wordTokensFileName = dirName + "/" + inputFileBaseName + ".tokens";
@@ -39,8 +42,8 @@ int main(int argc, char *argv[]) {
 
     // The next several if-statement make sure that the input file, the directory exist
     // and that the output file is writeable.
-    if( error_type status; (status = regularFileExistsAndIsAvailable(inputFileName)) != NO_ERROR )
-        exitOnError(status, inputFileName);
+    if( error_type status; (status = regularFileExistsAndIsAvailable(givenName)) != NO_ERROR )
+        exitOnError(status, givenName);
 
 
     if (error_type status; (status = directoryExists(dirName)) != NO_ERROR )
@@ -55,9 +58,9 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> words;
     namespace fs = std::filesystem;
-    Scanner scanner(inputFileName);
+    Scanner scanner(givenName);
     if (error_type status; (status = scanner.tokenize(words)) != NO_ERROR)
-        exitOnError(status,inputFileName);
+        exitOnError(status,givenName);
 
     if (error_type status; (status = writeVectorToFile(wordTokensFileName, words)) != NO_ERROR)
         exitOnError(status, wordTokensFileName);
