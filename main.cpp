@@ -14,8 +14,12 @@
 int main(int argc, char *argv[]) {
     std::ifstream in(argv[1]);
     if (!in) {
-        std::cerr << "error: cannot open input " << argv[1] << "\n";
-        return 1;
+        std::string altPath = std::string("input_output/") + argv[1];
+        in.open(altPath);
+        if (!in) {
+            std::cerr << "error: cannot open input " << argv[1] << "\n";
+            return 1;
+        }
     }
 
     if (argc != 2) {
