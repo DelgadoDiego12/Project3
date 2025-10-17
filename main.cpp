@@ -17,9 +17,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-
-
-
     const std::string dirName = std::string("input_output");
     const std::string givenName = std::string(argv[1]);
 
@@ -42,8 +39,8 @@ int main(int argc, char *argv[]) {
 
     // The next several if-statement make sure that the input file, the directory exist
     // and that the output file is writeable.
-    if( error_type status; (status = regularFileExistsAndIsAvailable(givenName)) != NO_ERROR )
-        exitOnError(status, givenName);
+    if( error_type status; (status = regularFileExistsAndIsAvailable(inputFileName)) != NO_ERROR )
+        exitOnError(status, inputFileName);
 
 
     if (error_type status; (status = directoryExists(dirName)) != NO_ERROR )
@@ -58,9 +55,9 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> words;
     namespace fs = std::filesystem;
-    Scanner scanner(givenName);
+    Scanner scanner(inputFileName);
     if (error_type status; (status = scanner.tokenize(words)) != NO_ERROR)
-        exitOnError(status,givenName);
+        exitOnError(status,inputFileName);
 
     if (error_type status; (status = writeVectorToFile(wordTokensFileName, words)) != NO_ERROR)
         exitOnError(status, wordTokensFileName);
