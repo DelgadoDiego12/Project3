@@ -1,0 +1,28 @@
+# CMake build dirs
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+
+# Binaries / objects
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+*.log
+
+# CLion / IDE
+.idea/
+
+# macOS
+.DS_Store
+
+# Misc
+*.iml
