@@ -12,4 +12,3 @@ file. readWord reads the next token from the input stream, creating the tokens.
 When testing my code I used the test prompts that were given. When using g++ -std=c++20 -Wall *.cpp -o huffman_part1 
 followed by ./huffman_part1 input_output/for_the_love_of_a_man.txt it worked well. It also worked well when using the 
 bash compile_and_test.bash for_the_love_of_a_man.
-# Project3
