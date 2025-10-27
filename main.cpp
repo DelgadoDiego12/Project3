@@ -10,6 +10,7 @@
 #include "TreeNode.hpp"
 #include "BinSearchTree.hpp"
 #include "PriorityQueue.hpp"
+#include "HuffmanTree.h"
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -36,6 +37,9 @@ int main(int argc, char *argv[]) {
 
     const std::string frequenciesFileName = dirName + "/" + inputFileBaseName + ".freq";
 
+    const std::string headerFileName = dirName + "/" + inputFileBaseName + ".hdr";
+
+    const std::string codeFileName = dirName + "/" + inputFileBaseName + ".code";
 
     // The next several if-statement make sure that the input file, the directory exist
     // and that the output file is writeable.
@@ -134,6 +138,22 @@ int main(int argc, char *argv[]) {
 
     for (std::size_t i = 0; i < leaves.size(); i++) {
         leaves[i] = nullptr;
+    }
+
+    HuffmanTree ht = HuffmanTree::buildFromCounts(frequencies);
+    {
+        std::ofstream hdr(headerFileName, std::ios::out | std::ios::trunc);
+        if (!hdr.is_open()) exitOnError(UNABLE_TO_OPEN_FILE_FOR_WRITING, headerFileName);
+        if (error_type e = ht.writeHeader(hdr); e != NO_ERROR) {
+            exitOnError(e, headerFileName);
+        }
+    }
+    {
+        std::ofstream code(codeFileName, std::ios::out | std::ios::trunc);
+        if (!code.is_open()) exitOnError(UNABLE_TO_OPEN_FILE_FOR_WRITING, codeFileName);
+        if (error_type e = ht.encode(words, code, 80); e != NO_ERROR) {
+            exitOnError(e, codeFileName);
+        }
     }
 
     return 0;
